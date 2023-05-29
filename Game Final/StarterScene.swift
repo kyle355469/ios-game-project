@@ -51,20 +51,20 @@ class StarterScene: SKScene {
         coinDisplayer.addChild(coinIcon)
         self.addChild(coinDisplayer)
         
-//        let sprite = SKSpriteNode(texture: sheep.textureForColumn(column: 0, row: 0))
-//        sprite.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
-//        let animateAction = SKAction.animate(with: [
-//            sheep.textureForColumn(column: 0, row: 2),
-//            sheep.textureForColumn(column: 1, row: 2),
-//            sheep.textureForColumn(column: 0, row: 2),
-//            sheep.textureForColumn(column: 1, row: 2),
-//            sheep.textureForColumn(column: 0, row: 2),
-//            sheep.textureForColumn(column: 2, row: 2),
-//            sheep.textureForColumn(column: 0, row: 2),
-//            sheep.textureForColumn(column: 2, row: 2)
-//        ], timePerFrame: 0.1)
-//        sprite.run(SKAction.repeatForever(animateAction))
-//
+        let sprite = SKSpriteNode(texture: sheep.textureForColumn(column: 0, row: 0))
+        sprite.position = CGPoint(x: self.frame.midX, y: self.frame.midY-200)
+        let animateAction = SKAction.animate(with: [
+            sheep.textureForColumn(column: 0, row: 2),
+            sheep.textureForColumn(column: 1, row: 2),
+            sheep.textureForColumn(column: 0, row: 2),
+            sheep.textureForColumn(column: 1, row: 2),
+            sheep.textureForColumn(column: 0, row: 2),
+            sheep.textureForColumn(column: 2, row: 2),
+            sheep.textureForColumn(column: 0, row: 2),
+            sheep.textureForColumn(column: 2, row: 2)
+        ], timePerFrame: 0.1)
+        sprite.run(SKAction.repeatForever(animateAction))
+
         
         let croppingRect = CGRect(x: 0.3, y: 0.92, width:0.2, height: 0.039)
         let StartTexture = SKTexture(rect: croppingRect, in: AllButton)
@@ -74,11 +74,12 @@ class StarterScene: SKScene {
         startButton.name = "startButton"
         let startWord = SKLabelNode(text: "Start")
         startWord.name = "startButton"
-        startWord.position = CGPoint(x: self.frame.midX, y: self.frame.midY+50)
+        startWord.position = CGPoint(x: 0, y: -5)
         startWord.fontName = "Arial"
         startWord.fontColor = UIColor.black
         startWord.zPosition = 1
         startWord.fontSize = 28
+        startButton.addChild(startWord)
         
         
         let upGradeTexture = SKTexture(rect: croppingRect, in: AllButton)
@@ -88,20 +89,19 @@ class StarterScene: SKScene {
         upGradeButton.name = "upGradeButton"
         let upGradeWord = SKLabelNode(text: "Upgrade")
         upGradeWord.name = "upGradeButton"
-        upGradeWord.position = CGPoint(x: self.frame.midX, y: self.frame.midY-50)
+        upGradeWord.position = CGPoint(x: 0, y: -5)
         upGradeWord.fontName = "Arial"
         upGradeWord.fontColor = UIColor.black
         upGradeWord.zPosition = 1
         upGradeWord.fontSize = 28
+        upGradeButton.addChild(upGradeWord)
         
         self.addChild(bg)
         self.addChild(title)
-        //self.addChild(sprite)
+        self.addChild(sprite)
         
-        self.addChild(startWord)
         self.addChild(startButton)
         self.addChild(upGradeButton)
-        self.addChild(upGradeWord)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -131,6 +131,10 @@ class StarterScene: SKScene {
 //                self.addChild(sprite)
                 
                 // Perform any actions or logic you desire
+            }
+            else if touchedNode.name == "upGradeButton" {
+                let upgradeScene = UpGradeScene(size: self.size)
+                self.view?.presentScene(upgradeScene)
             }
         }
     }
