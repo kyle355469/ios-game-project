@@ -7,34 +7,13 @@
 import SpriteKit
 import GameplayKit
 
-//class SpriteSheet {
-//    let texture: SKTexture
-//    let rows: Int
-//    let columns: Int
-//    var frameSize: CGSize {
-//        CGSize(width: texture.size().width / CGFloat(columns),
-//               height: texture.size().height / CGFloat(rows))
-//    }
-//
-//    init(texture: SKTexture, rows: Int, columns: Int) {
-//        self.texture = texturea
-//        self.rows = rows
-//        self.columns = columns
-//    }
-//
-//    func sprite(atRow row: Int, column: Int) -> SKTexture {
-//        let textureRect = CGRect(x: frameSize.width * CGFloat(column),
-//                                 y: frameSize.height * CGFloat(row),
-//                                 width: frameSize.width,
-//                                 height: frameSize.height)
-//        return SKTexture(rect: textureRect, in: texture)
-//    }
-//}
 
 
 class StarterScene: SKScene {
+    var coinCount:Int = 0
     let sheep = SpriteSheet(texture: SKTexture(imageNamed: "sheep2.png"), rows: 3, columns: 4)
     let AllButton = SKTexture(imageNamed: "Button.png")
+    let AllWindows = SKTexture(imageNamed: "Windows.png")
     override func didMove(to view: SKView) {
         createScene()
     }
@@ -54,6 +33,23 @@ class StarterScene: SKScene {
         title.horizontalAlignmentMode = .center
         title.verticalAlignmentMode = .center
         applyBoldFont(to: title)
+        
+        let coinCountCrop = CGRect(x: 0.779, y: 0.187, width: 0.07, height: 0.032)
+        let coinDisplayer = SKSpriteNode(texture: SKTexture(rect: coinCountCrop, in: AllWindows))
+        coinDisplayer.position = CGPoint(x: self.frame.minX + 70, y: self.frame.maxY - 100)
+        coinDisplayer.size = CGSize(width: 150, height: 60)
+        let coinCounter = SKLabelNode(text: "\(coinCount)")
+        coinCounter.fontSize = 25
+        coinCounter.zPosition = 1
+        coinCounter.position = CGPoint(x: 40, y: -10)
+        coinDisplayer.addChild(coinCounter)
+        let coinIconCrop = CGRect(x: 0.854, y: 0.262, width: 0.029, height: 0.038)
+        let coinIcon = SKSpriteNode(texture: SKTexture(rect: coinIconCrop, in: AllWindows))
+        coinIcon.size = CGSize(width: 50, height: 50)
+        coinIcon.zPosition = 1
+        coinIcon.position = CGPoint(x: -44, y: -1)
+        coinDisplayer.addChild(coinIcon)
+        self.addChild(coinDisplayer)
         
 //        let sprite = SKSpriteNode(texture: sheep.textureForColumn(column: 0, row: 0))
 //        sprite.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
@@ -84,6 +80,7 @@ class StarterScene: SKScene {
         startWord.zPosition = 1
         startWord.fontSize = 28
         
+        
         let upGradeTexture = SKTexture(rect: croppingRect, in: AllButton)
         let upGradeButton = SKSpriteNode(texture: upGradeTexture)
         upGradeButton.size = CGSize(width: 200, height: 80)
@@ -113,23 +110,25 @@ class StarterScene: SKScene {
             let touchedNode = atPoint(location)
             
             if touchedNode.name == "startButton" {
-                // Button is tapped
-                let sprite = SKSpriteNode(texture: sheep.textureForColumn(column: 0, row: 0))
-                let a = arc4random() % UInt32(self.frame.maxX)
-                let b = arc4random() % UInt32(self.frame.maxY)
-                sprite.position = CGPoint(x: Int(a), y: Int(b))
-                let animateAction = SKAction.animate(with: [
-                    sheep.textureForColumn(column: 0, row: 0),
-                    sheep.textureForColumn(column: 1, row: 0),
-                    sheep.textureForColumn(column: 0, row: 0),
-                    sheep.textureForColumn(column: 1, row: 0),
-                    sheep.textureForColumn(column: 0, row: 0),
-                    sheep.textureForColumn(column: 1, row: 0),
-                    sheep.textureForColumn(column: 0, row: 0),
-                    sheep.textureForColumn(column: 1, row: 0)
-                ], timePerFrame: 0.1)
-                sprite.run(SKAction.repeatForever(animateAction))
-                self.addChild(sprite)
+                let chooseLevelScene = ChooseLevelScene(size: self.size)
+                self.view?.presentScene(chooseLevelScene)
+                // random sheep
+//                let sprite = SKSpriteNode(texture: sheep.textureForColumn(column: 0, row: 0))
+//                let a = arc4random() % UInt32(self.frame.maxX)
+//                let b = arc4random() % UInt32(self.frame.maxY)
+//                sprite.position = CGPoint(x: Int(a), y: Int(b))
+//                let animateAction = SKAction.animate(with: [
+//                    sheep.textureForColumn(column: 0, row: 0),
+//                    sheep.textureForColumn(column: 1, row: 0),
+//                    sheep.textureForColumn(column: 0, row: 0),
+//                    sheep.textureForColumn(column: 1, row: 0),
+//                    sheep.textureForColumn(column: 0, row: 0),
+//                    sheep.textureForColumn(column: 1, row: 0),
+//                    sheep.textureForColumn(column: 0, row: 0),
+//                    sheep.textureForColumn(column: 1, row: 0)
+//                ], timePerFrame: 0.1)
+//                sprite.run(SKAction.repeatForever(animateAction))
+//                self.addChild(sprite)
                 
                 // Perform any actions or logic you desire
             }
