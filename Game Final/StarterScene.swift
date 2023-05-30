@@ -9,10 +9,10 @@ import GameplayKit
 
 let AllButton = SKTexture(imageNamed: "Button.png")
 let AllWindows = SKTexture(imageNamed: "Windows.png")
-
+let sheep = SpriteSheet(texture: SKTexture(imageNamed: "sheep2.png"), rows: 3, columns: 4)
 class StarterScene: SKScene {
-    var coinCount:Int = 0
-    let sheep = SpriteSheet(texture: SKTexture(imageNamed: "sheep2.png"), rows: 3, columns: 4)
+    var coinCount:Int = 10000
+    var sheepCount = 1
     
     override func didMove(to view: SKView) {
         createScene()
@@ -41,7 +41,7 @@ class StarterScene: SKScene {
         let coinCounter = SKLabelNode(text: "\(coinCount)")
         coinCounter.fontSize = 25
         coinCounter.zPosition = 1
-        coinCounter.position = CGPoint(x: 40, y: -10)
+        coinCounter.position = CGPoint(x: 20, y: -10)
         coinDisplayer.addChild(coinCounter)
         let coinIconCrop = CGRect(x: 0.854, y: 0.262, width: 0.029, height: 0.038)
         let coinIcon = SKSpriteNode(texture: SKTexture(rect: coinIconCrop, in: AllWindows))
@@ -52,7 +52,7 @@ class StarterScene: SKScene {
         self.addChild(coinDisplayer)
         
         let sprite = SKSpriteNode(texture: sheep.textureForColumn(column: 0, row: 0))
-        sprite.position = CGPoint(x: self.frame.midX, y: self.frame.midY-200)
+        sprite.position = CGPoint(x: self.frame.midX, y: self.frame.midY-300)
         let animateAction = SKAction.animate(with: [
             sheep.textureForColumn(column: 0, row: 2),
             sheep.textureForColumn(column: 1, row: 2),
@@ -70,7 +70,7 @@ class StarterScene: SKScene {
         let StartTexture = SKTexture(rect: croppingRect, in: AllButton)
         let startButton = SKSpriteNode(texture: StartTexture)
         startButton.size = CGSize(width: 200, height: 80)
-        startButton.position = CGPoint(x: self.frame.midX, y: self.frame.midY+50)
+        startButton.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
         startButton.name = "startButton"
         let startWord = SKLabelNode(text: "Start")
         startWord.name = "startButton"
@@ -85,7 +85,7 @@ class StarterScene: SKScene {
         let upGradeTexture = SKTexture(rect: croppingRect, in: AllButton)
         let upGradeButton = SKSpriteNode(texture: upGradeTexture)
         upGradeButton.size = CGSize(width: 200, height: 80)
-        upGradeButton.position = CGPoint(x: self.frame.midX, y: self.frame.midY-50)
+        upGradeButton.position = CGPoint(x: self.frame.midX, y: self.frame.midY-100)
         upGradeButton.name = "upGradeButton"
         let upGradeWord = SKLabelNode(text: "Upgrade")
         upGradeWord.name = "upGradeButton"
@@ -111,10 +111,14 @@ class StarterScene: SKScene {
             
             if touchedNode.name == "startButton" {
                 let chooseLevelScene = ChooseLevelScene(size: self.size)
+                chooseLevelScene.coinCount = self.coinCount
+                chooseLevelScene.sheepCount = self.sheepCount
                 self.view?.presentScene(chooseLevelScene)
             }
             else if touchedNode.name == "upGradeButton" {
                 let upgradeScene = UpGradeScene(size: self.size)
+                upgradeScene.coinCount = self.coinCount
+                upgradeScene.sheepUpgradeLevel = self.sheepCount
                 self.view?.presentScene(upgradeScene)
             }
         }

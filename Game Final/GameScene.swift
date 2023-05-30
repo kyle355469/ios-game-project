@@ -16,6 +16,7 @@ class Wolf: SKSpriteNode {
 }
 
 class GameScene: SKScene {
+    var coinCount:Int = 0
     var isGameOver = 0
     let buttonzPos = 2;
     let wolfzPos = 0;
@@ -96,10 +97,23 @@ class GameScene: SKScene {
             tempWolf.position = CGPoint(x: px * (CGFloat(tempWolf.row) + 0.5) + 27.0, y: self.frame.midY - 130 + CGFloat(80 * (wolfController.count)))
             tempWolf.name = "wolf"
             tempWolf.zPosition = CGFloat(wolfzPos)
+            
+            // hard
             if isHard == 1 {
-                tempWolf.jumpRow = Int(arc4random()) % 3
-                if tempWolf.jumpRow + tempWolf.row > 2 {
-                    tempWolf.jumpRow -= 2
+                tempWolf.jumpRow = Int(arc4random()) % 5 - 2
+                if tempWolf.jumpRow == -2 {
+                    let leftnotify = SKSpriteNode(texture: SKTexture(rect: CGRect(x: 72.0 / 1200.0, y: 534.0 / 1200.0, width: 144.0 / 1200.0, height: 156.0 / 1200.0), in: allPlayButton))
+                    leftnotify.size = CGSize(width: 40, height: 40)
+                    leftnotify.position = CGPoint(x: -20, y: -20)
+                    leftnotify.zPosition = 1
+                    tempWolf.addChild(leftnotify)
+                }
+                else if tempWolf.jumpRow == 2 {
+                    let rightnotify = SKSpriteNode(texture: SKTexture(rect: CGRect(x: 271 / 1200.0, y: 534.0 / 1200.0, width: 144.0 / 1200.0, height: 156.0 / 1200.0), in: allPlayButton))
+                    rightnotify.size = CGSize(width: 40, height: 40)
+                    rightnotify.position = CGPoint(x: -20, y: -20)
+                    rightnotify.zPosition = 1
+                    tempWolf.addChild(rightnotify)
                 }
             }
             addChild(tempWolf)
@@ -174,7 +188,7 @@ class GameScene: SKScene {
                 if touchedNode.name == "leftButton" {
                     swordPos -= 1;
                     if swordPos < 0 {
-                        swordPos = 0
+                        swordPos += 5
                     }
                     let s = self.childNode(withName: "sword") as! SKSpriteNode
                     s.position = CGPoint(x: px * (CGFloat(swordPos) + 0.5) + 27.0, y: self.frame.midY - 200)
@@ -183,7 +197,7 @@ class GameScene: SKScene {
                 if touchedNode.name == "rightButton" {
                     swordPos += 1;
                     if swordPos > 4 {
-                        swordPos = 4
+                        swordPos -= 5
                     }
                     let s = self.childNode(withName: "sword") as! SKSpriteNode
                     s.position = CGPoint(x: px * (CGFloat(swordPos) + 0.5) + 27.0, y: self.frame.midY - 200)
@@ -192,7 +206,7 @@ class GameScene: SKScene {
                 if touchedNode.name == "twiceRightButton" {
                     swordPos += 2;
                     if swordPos > 4 {
-                        swordPos = 4
+                        swordPos -= 5
                     }
                     let s = self.childNode(withName: "sword") as! SKSpriteNode
                     s.position = CGPoint(x: px * (CGFloat(swordPos) + 0.5) + 27.0, y: self.frame.midY - 200)
@@ -201,7 +215,7 @@ class GameScene: SKScene {
                 if touchedNode.name == "twiceLeftButton" {
                     swordPos -= 2;
                     if swordPos < 0 {
-                        swordPos = 0
+                        swordPos += 5
                     }
                     let s = self.childNode(withName: "sword") as! SKSpriteNode
                     s.position = CGPoint(x: px * (CGFloat(swordPos) + 0.5) + 27.0, y: self.frame.midY - 200)
@@ -215,7 +229,10 @@ class GameScene: SKScene {
         
     }
     func moveDetection() {
+        let px = (self.frame.maxX - self.frame.minX - 40) / CGFloat(5)
+        var count = 0
         let firstWolf = wolfController[0]
+        
         if firstWolf.row == swordPos {
             firstWolf.removeFromParent()
             totalhitCount += 1
@@ -240,7 +257,23 @@ class GameScene: SKScene {
         }
         
         for wolf in wolfController {
-            wolf.position = CGPoint(x: wolf.position.x ,y: wolf.position.y - 80)
+            if count == 0 {
+                if wolf.jumpRow == -2 {
+                    wolf.row -= 1
+                    wolf.position = CGPoint(x: wolf.position.x - px,y: wolf.position.y - 80)
+                }
+                else if wolf.jumpRow == 2 {
+                    wolf.row += 1
+                    wolf.position = CGPoint(x: wolf.position.x + px,y: wolf.position.y - 80)
+                }
+                else{
+                    wolf.position = CGPoint(x: wolf.position.x ,y: wolf.position.y - 80)
+                }
+            }
+            else {
+                wolf.position = CGPoint(x: wolf.position.x ,y: wolf.position.y - 80)
+            }
+            count += 1
         }
         
         if wolfController.count < 20 {
@@ -256,7 +289,7 @@ class GameScene: SKScene {
             let gameOverText = SKLabelNode(text: "Game Over")
             gameOverText.fontColor = UIColor.black
             gameOverText.fontSize = 50
-            gameOverText.position = CGPoint(x: 0, y: -10)
+            gameOverText.position = CGPoint(x: 0, y: -15)
             gameOverText.zPosition = 1
             gameOverText.fontName = "Arial-BoldMT"
             gameOverTag.addChild(gameOverText)
@@ -265,6 +298,9 @@ class GameScene: SKScene {
             
             gameOverTag.run(action, completion: {
                 let scoreScene = ScoreScene(size: self.size)
+                scoreScene.totalWolfHit = self.totalhitCount
+                scoreScene.coinCount = self.coinCount
+                scoreScene.sheepCount = self.sheepCount
                 self.view?.presentScene(scoreScene, transition: SKTransition.moveIn(with: .up, duration: 0.8))
             })
             addChild(gameOverTag)
