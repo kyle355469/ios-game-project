@@ -8,20 +8,25 @@ import SpriteKit
 import GameplayKit
 
 
+let allPlayButton = SKTexture(imageNamed: "gameButton")
+
 class Wolf: SKSpriteNode {
     var row = 0
     var jumpRow = -1
 }
 
 class GameScene: SKScene {
+    var isGameOver = 0
     let buttonzPos = 2;
     let wolfzPos = 0;
     let swordzPos = 1;
     var isHard = 0
-    var sheepCount:Int = 7
-    var swordPos = 1
+    var sheepCount:Int = 5
+    var swordPos = 2
+    var totalhitCount = 0;
     let sheep = SpriteSheet(texture: SKTexture(imageNamed: "sheep2.png"), rows: 3, columns: 4)
-    let allPlayButton = SKTexture(imageNamed: "gameButton")
+    
+    let allWindows = SKTexture(imageNamed: "Windows")
     var sheepController: [SKSpriteNode] = []
     var wolfController: [Wolf] = []
     override func didMove(to view: SKView) {
@@ -40,7 +45,7 @@ class GameScene: SKScene {
         
         let fence = SKSpriteNode(imageNamed: "fence")
         fence.size = CGSize(width: self.frame.maxX - self.frame.minX + 80, height: 240)
-        fence.position = CGPoint(x: self.frame.midX, y: self.frame.midY - 230)
+        fence.position = CGPoint(x: self.frame.midX, y: self.frame.midY - 250)
         fence.zPosition = 0
         addChild(fence)
         
@@ -50,7 +55,7 @@ class GameScene: SKScene {
         
         buttonCreation()
         sheepCreation()
-        wolfCreation()
+        wolfCreation(40)
     }
     
     func swordCreation() -> SKSpriteNode {
@@ -58,7 +63,7 @@ class GameScene: SKScene {
         let tempS = SKSpriteNode(texture: SKTexture(rect: CGRect(x: 1300.0 / 3000.0, y: 0, width: 330.0/3000.0, height: 1), in: bigSword))
         tempS.size = CGSize(width: 70, height: 120)
         tempS.name = "sword"
-        tempS.zPosition = CGFloat(swordPos)
+        tempS.zPosition = CGFloat(swordzPos)
         
         return tempS
     }
@@ -71,29 +76,30 @@ class GameScene: SKScene {
             let tempSheep = SKSpriteNode(texture: sheep.textureForColumn(column: 0, row: 0))
             tempSheep.position = CGPoint(x: Int(px * (CGFloat(i) - 0.5) + 30), y: Int(py))
             tempSheep.zPosition = CGFloat(50 - i)
+            tempSheep.size = CGSize(width: 100, height: 100)
             tempSheep.name = "sheep"
             addChild(tempSheep)
             sheepController.append(tempSheep)
         }
     }
     
-    func wolfCreation(){
+    func wolfCreation(_ newWolf:Int){
         // create
         let bigWolf = SKTexture(imageNamed: "wolf")
         let wolfrect = CGRect(x: 194.0 / 1200.0, y: 45.0 / 1200.0, width: 810.0 / 1200.0, height: 1150.0 / 1200.0)
         let wolfTexture = SKTexture(rect: wolfrect, in: bigWolf)
-        let px = (self.frame.maxX - self.frame.minX - 40) / CGFloat(3)
-        for i in 1...80 {
+        let px = (self.frame.maxX - self.frame.minX - 40) / CGFloat(5)
+        for _ in 1...newWolf {
             let tempWolf = Wolf(texture: wolfTexture)
-            tempWolf.row = Int(arc4random()) % 3
-            tempWolf.size = CGSize(width: 120, height: 120)
-            tempWolf.position = CGPoint(x: px * (CGFloat(tempWolf.row) + 0.5) + 27.0, y: self.frame.midY - 130 + CGFloat(110 * (i - 1)))
+            tempWolf.row = Int(arc4random()) % 3 + 1
+            tempWolf.size = CGSize(width: 80, height: 80)
+            tempWolf.position = CGPoint(x: px * (CGFloat(tempWolf.row) + 0.5) + 27.0, y: self.frame.midY - 130 + CGFloat(80 * (wolfController.count)))
             tempWolf.name = "wolf"
             tempWolf.zPosition = CGFloat(wolfzPos)
             if isHard == 1 {
-                tempWolf.jumpRow = Int(arc4random()) % 2
-                if tempWolf.jumpRow > 2 {
-                    tempWolf.jumpRow -= 3
+                tempWolf.jumpRow = Int(arc4random()) % 3
+                if tempWolf.jumpRow + tempWolf.row > 2 {
+                    tempWolf.jumpRow -= 2
                 }
             }
             addChild(tempWolf)
@@ -159,28 +165,110 @@ class GameScene: SKScene {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches {
-            let location = touch.location(in: self)
-            let touchedNode = atPoint(location)
-            print(touchedNode.name)
-            if touchedNode.name == "leftButton" {
-                if swordPos > 0 {
+        let px = (self.frame.maxX - self.frame.minX - 40) / CGFloat(5)
+        if isGameOver != 1 {
+            for touch in touches {
+                let location = touch.location(in: self)
+                let touchedNode = atPoint(location)
+                print(touchedNode.name)
+                if touchedNode.name == "leftButton" {
                     swordPos -= 1;
-                    let px = (self.frame.maxX - self.frame.minX - 40) / CGFloat(3)
+                    if swordPos < 0 {
+                        swordPos = 0
+                    }
                     let s = self.childNode(withName: "sword") as! SKSpriteNode
                     s.position = CGPoint(x: px * (CGFloat(swordPos) + 0.5) + 27.0, y: self.frame.midY - 200)
+                    moveDetection()
                 }
-                
-            }
-            if touchedNode.name == "rightButton" {
-                if swordPos < 3 {
+                if touchedNode.name == "rightButton" {
                     swordPos += 1;
-                    let px = (self.frame.maxX - self.frame.minX - 40) / CGFloat(3)
+                    if swordPos > 4 {
+                        swordPos = 4
+                    }
                     let s = self.childNode(withName: "sword") as! SKSpriteNode
                     s.position = CGPoint(x: px * (CGFloat(swordPos) + 0.5) + 27.0, y: self.frame.midY - 200)
+                    moveDetection()
                 }
-                
+                if touchedNode.name == "twiceRightButton" {
+                    swordPos += 2;
+                    if swordPos > 4 {
+                        swordPos = 4
+                    }
+                    let s = self.childNode(withName: "sword") as! SKSpriteNode
+                    s.position = CGPoint(x: px * (CGFloat(swordPos) + 0.5) + 27.0, y: self.frame.midY - 200)
+                    moveDetection()
+                }
+                if touchedNode.name == "twiceLeftButton" {
+                    swordPos -= 2;
+                    if swordPos < 0 {
+                        swordPos = 0
+                    }
+                    let s = self.childNode(withName: "sword") as! SKSpriteNode
+                    s.position = CGPoint(x: px * (CGFloat(swordPos) + 0.5) + 27.0, y: self.frame.midY - 200)
+                    moveDetection()
+                }
+                if touchedNode.name == "midButton" {
+                    moveDetection()
+                }
             }
+        }
+        
+    }
+    func moveDetection() {
+        let firstWolf = wolfController[0]
+        if firstWolf.row == swordPos {
+            firstWolf.removeFromParent()
+            totalhitCount += 1
+            wolfController.remove(at: 0)
+        } else {
+            firstWolf.removeFromParent()
+            wolfController.remove(at: 0)
+            let eater = SKSpriteNode(imageNamed: "wolf")
+            eater.size = CGSize(width: 200, height: 200)
+            eater.zPosition = 100
+            eater.position = CGPoint(x: self.frame.maxX + 20, y: self.frame.minY + 20)
+            let action = SKAction.sequence([SKAction.moveTo(x: self.frame.minX - 20, duration: 0.7), SKAction.removeFromParent()])
+            eater.run(action)
+            addChild(eater)
+            if sheepController.count != 0 {
+                let dieSheep = sheepController[sheepController.count - 1]
+                dieSheep.removeFromParent()
+                sheepController.remove(at: sheepController.count - 1)
+            }
+            
+            print(sheepController.count)
+        }
+        
+        for wolf in wolfController {
+            wolf.position = CGPoint(x: wolf.position.x ,y: wolf.position.y - 80)
+        }
+        
+        if wolfController.count < 20 {
+            wolfCreation(20)
+        }
+        
+        if sheepController.count == 0 {
+            isGameOver = 1
+            let gameOverTag = SKSpriteNode(texture: SKTexture(rect: CGRect(x: 2635.0 / 4868.0, y: 1003.0 / 3787.0, width: 660.0 / 4868.0, height: 700.0 / 3787.0), in: allWindows))
+            gameOverTag.position = CGPoint(x: self.frame.minX - 200, y: self.frame.midY)
+            gameOverTag.zPosition = 101
+            gameOverTag.size = CGSize(width: 400, height: 200)
+            let gameOverText = SKLabelNode(text: "Game Over")
+            gameOverText.fontColor = UIColor.black
+            gameOverText.fontSize = 50
+            gameOverText.position = CGPoint(x: 0, y: -10)
+            gameOverText.zPosition = 1
+            gameOverText.fontName = "Arial-BoldMT"
+            gameOverTag.addChild(gameOverText)
+            
+            let action = SKAction.sequence([SKAction.moveTo(x: self.frame.midX, duration: 0.5), SKAction.wait(forDuration: 2)])
+            
+            gameOverTag.run(action, completion: {
+                let scoreScene = ScoreScene(size: self.size)
+                self.view?.presentScene(scoreScene, transition: SKTransition.moveIn(with: .up, duration: 0.8))
+            })
+            addChild(gameOverTag)
+            // game over icon 停一下 進結算頁面
         }
     }
     

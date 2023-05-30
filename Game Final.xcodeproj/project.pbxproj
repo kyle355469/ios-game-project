@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		85AA003F2A24BDC700EDFAA1 /* ChooseLevelScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85AA003E2A24BDC700EDFAA1 /* ChooseLevelScene.swift */; };
 		85AA00412A24C0B900EDFAA1 /* UpGradeScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85AA00402A24C0B900EDFAA1 /* UpGradeScene.swift */; };
+		85AA00432A260B5300EDFAA1 /* ScoreScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85AA00422A260B5300EDFAA1 /* ScoreScene.swift */; };
 		CB206D8D2A24713C0017C764 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB206D8C2A24713C0017C764 /* AppDelegate.swift */; };
 		CB206D8F2A24713C0017C764 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = CB206D8E2A24713C0017C764 /* GameScene.sks */; };
 		CB206D912A24713C0017C764 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = CB206D902A24713C0017C764 /* Actions.sks */; };
@@ -23,6 +24,7 @@
 /* Begin PBXFileReference section */
 		85AA003E2A24BDC700EDFAA1 /* ChooseLevelScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseLevelScene.swift; sourceTree = "<group>"; };
 		85AA00402A24C0B900EDFAA1 /* UpGradeScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpGradeScene.swift; sourceTree = "<group>"; };
+		85AA00422A260B5300EDFAA1 /* ScoreScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreScene.swift; sourceTree = "<group>"; };
 		CB206D892A24713C0017C764 /* Game Final.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Game Final.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB206D8C2A24713C0017C764 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CB206D8E2A24713C0017C764 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -76,6 +78,7 @@
 				CB206DE82A24A7580017C764 /* StarterScene.swift */,
 				85AA003E2A24BDC700EDFAA1 /* ChooseLevelScene.swift */,
 				85AA00402A24C0B900EDFAA1 /* UpGradeScene.swift */,
+				85AA00422A260B5300EDFAA1 /* ScoreScene.swift */,
 			);
 			path = "Game Final";
 			sourceTree = "<group>";
@@ -154,6 +157,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CB206DE32A24969C0017C764 /* GameScene.swift in Sources */,
+				85AA00432A260B5300EDFAA1 /* ScoreScene.swift in Sources */,
 				CB206D952A24713C0017C764 /* GameViewController.swift in Sources */,
 				CB206D8D2A24713C0017C764 /* AppDelegate.swift in Sources */,
 				85AA00412A24C0B900EDFAA1 /* UpGradeScene.swift in Sources */,

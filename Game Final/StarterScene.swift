@@ -7,13 +7,13 @@
 import SpriteKit
 import GameplayKit
 
-
+let AllButton = SKTexture(imageNamed: "Button.png")
+let AllWindows = SKTexture(imageNamed: "Windows.png")
 
 class StarterScene: SKScene {
     var coinCount:Int = 0
     let sheep = SpriteSheet(texture: SKTexture(imageNamed: "sheep2.png"), rows: 3, columns: 4)
-    let AllButton = SKTexture(imageNamed: "Button.png")
-    let AllWindows = SKTexture(imageNamed: "Windows.png")
+    
     override func didMove(to view: SKView) {
         createScene()
     }
@@ -112,25 +112,6 @@ class StarterScene: SKScene {
             if touchedNode.name == "startButton" {
                 let chooseLevelScene = ChooseLevelScene(size: self.size)
                 self.view?.presentScene(chooseLevelScene)
-                // random sheep
-//                let sprite = SKSpriteNode(texture: sheep.textureForColumn(column: 0, row: 0))
-//                let a = arc4random() % UInt32(self.frame.maxX)
-//                let b = arc4random() % UInt32(self.frame.maxY)
-//                sprite.position = CGPoint(x: Int(a), y: Int(b))
-//                let animateAction = SKAction.animate(with: [
-//                    sheep.textureForColumn(column: 0, row: 0),
-//                    sheep.textureForColumn(column: 1, row: 0),
-//                    sheep.textureForColumn(column: 0, row: 0),
-//                    sheep.textureForColumn(column: 1, row: 0),
-//                    sheep.textureForColumn(column: 0, row: 0),
-//                    sheep.textureForColumn(column: 1, row: 0),
-//                    sheep.textureForColumn(column: 0, row: 0),
-//                    sheep.textureForColumn(column: 1, row: 0)
-//                ], timePerFrame: 0.1)
-//                sprite.run(SKAction.repeatForever(animateAction))
-//                self.addChild(sprite)
-                
-                // Perform any actions or logic you desire
             }
             else if touchedNode.name == "upGradeButton" {
                 let upgradeScene = UpGradeScene(size: self.size)

@@ -10,8 +10,6 @@ import SpriteKit
 import GameplayKit
 
 class UpGradeScene: SKScene {
-    let AllWindows = SKTexture(imageNamed: "Windows.png")
-    let AllButton = SKTexture(imageNamed: "Button.png")
     var coinCount:Int = 0;
     override func didMove(to view: SKView) {
         createScene()
