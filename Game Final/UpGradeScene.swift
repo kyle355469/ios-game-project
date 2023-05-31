@@ -39,7 +39,7 @@ class UpGradeScene: SKScene {
     }
     
     func costCalculation() -> Int{
-        return ((sheepUpgradeLevel * sheepUpgradeLevel + sheepUpgradeLevel * 2) * 100)
+        return ((sheepUpgradeLevel * sheepUpgradeLevel / 2 + sheepUpgradeLevel * 2) * 100)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

@@ -57,6 +57,12 @@ class GameScene: SKScene {
         buttonCreation()
         sheepCreation()
         wolfCreation(40)
+        let pauseButton = SKSpriteNode(texture: SKTexture(rect: CGRect(x: 184.0 / 1860.0, y: 2991.0 / 4999.0, width:0.1, height: 0.039), in: AllButton))
+        pauseButton.position = CGPoint(x: self.frame.maxX - 40, y: self.frame.maxY - 80)
+        pauseButton.size = CGSize(width: 60, height: 60)
+        pauseButton.zPosition = 2
+        pauseButton.name = "pause"
+        addChild(pauseButton)
     }
     
     func swordCreation() -> SKSpriteNode {
@@ -180,11 +186,11 @@ class GameScene: SKScene {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let px = (self.frame.maxX - self.frame.minX - 40) / CGFloat(5)
-        if isGameOver != 1 {
-            for touch in touches {
-                let location = touch.location(in: self)
-                let touchedNode = atPoint(location)
-                print(touchedNode.name)
+        for touch in touches {
+            let location = touch.location(in: self)
+            let touchedNode = atPoint(location)
+            print(touchedNode.name)
+            if isGameOver != 1 {
                 if touchedNode.name == "leftButton" {
                     swordPos -= 1;
                     if swordPos < 0 {
@@ -224,9 +230,94 @@ class GameScene: SKScene {
                 if touchedNode.name == "midButton" {
                     moveDetection()
                 }
+                if touchedNode.name == "pause"{
+                    isGameOver = 1
+                    let pausingTab = SKSpriteNode(texture: SKTexture(rect: CGRect(x: 1431.0 / 4868.0, y: 1962.0 / 3787.0, width: CGFloat(2087-1431) / 4860.0, height: CGFloat(2949 - 1962) / 3787.0), in: allWindows))
+                    pausingTab.size = CGSize(width: 500, height: 700)
+                    pausingTab.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
+                    pausingTab.zPosition = 10
+                    pausingTab.name = "PT"
+                    
+                    // not done
+                    let croppingRect = CGRect(x: 0.3, y: 0.92, width:0.2, height: 0.039)
+                    let resumeTexture = SKTexture(rect: croppingRect, in: AllButton)
+                    let resumeButton = SKSpriteNode(texture: resumeTexture)
+                    resumeButton.size = CGSize(width: 200, height: 80)
+                    resumeButton.position = CGPoint(x: 0, y: 50)
+                    resumeButton.name = "resumeButton"
+                    resumeButton.zPosition = 1
+                    let resumeWord = SKLabelNode(text: "resume")
+                    resumeWord.name = "resumeButton"
+                    resumeWord.position = CGPoint(x: 0, y: -5)
+                    resumeWord.fontName = "Arial"
+                    resumeWord.fontColor = UIColor.black
+                    resumeWord.zPosition = 1
+                    resumeWord.fontSize = 28
+                    resumeButton.addChild(resumeWord)
+                    
+                    let restartTexture = SKTexture(rect: croppingRect, in: AllButton)
+                    let restartButton = SKSpriteNode(texture: restartTexture)
+                    restartButton.size = CGSize(width: 200, height: 80)
+                    restartButton.position = CGPoint(x: 0, y: -30)
+                    restartButton.name = "restartButton"
+                    restartButton.zPosition = 1
+                    let restartWord = SKLabelNode(text: "restart")
+                    restartWord.name = "restartButton"
+                    restartWord.position = CGPoint(x: 0, y: -5)
+                    restartWord.fontName = "Arial"
+                    restartWord.fontColor = UIColor.black
+                    restartWord.zPosition = 1
+                    restartWord.fontSize = 28
+                    restartButton.addChild(restartWord)
+                    
+                    let menuTexture = SKTexture(rect: croppingRect, in: AllButton)
+                    let menuButton = SKSpriteNode(texture: menuTexture)
+                    menuButton.size = CGSize(width: 200, height: 80)
+                    menuButton.position = CGPoint(x: 0, y: -110)
+                    menuButton.name = "menuButton"
+                    menuButton.zPosition = 1
+                    let menuWord = SKLabelNode(text: "menu")
+                    menuWord.name = "menuButton"
+                    menuWord.position = CGPoint(x: 0, y: -5)
+                    menuWord.fontName = "Arial"
+                    menuWord.fontColor = UIColor.black
+                    menuWord.zPosition = 1
+                    menuWord.fontSize = 28
+                    menuButton.addChild(menuWord)
+                    
+                    pausingTab.addChild(resumeButton)
+                    pausingTab.addChild(restartButton)
+                    pausingTab.addChild(menuButton)
+                    
+                    
+                    let pauseText = SKLabelNode(text: "PAUSE")
+                    pauseText.fontSize = 60
+                    pauseText.fontName = "Arial-BoldMT"
+                    pauseText.fontColor = UIColor.black
+                    pauseText.position = CGPoint(x: 0, y: 150)
+                    pauseText.zPosition = 1
+                    pausingTab.addChild(pauseText)
+                    addChild(pausingTab)
+                }
+            }
+            if touchedNode.name == "restartButton" {
+                let gameScene = GameScene(size: self.size)
+                gameScene.coinCount = self.coinCount
+                gameScene.sheepCount = self.sheepCount
+                self.view?.presentScene(gameScene, transition: SKTransition.moveIn(with: .up, duration: 0.8))
+            }
+            if touchedNode.name == "resumeButton" {
+                isGameOver = 0
+                let pausingTab = childNode(withName: "PT") as! SKSpriteNode
+                pausingTab.removeFromParent()
+            }
+            if touchedNode.name == "menuButton" {
+                let starterScene = StarterScene(size: self.size)
+                starterScene.coinCount = self.coinCount
+                starterScene.sheepCount = self.sheepCount
+                self.view?.presentScene(starterScene, transition: SKTransition.fade(withDuration: 1))
             }
         }
-        
     }
     func moveDetection() {
         let px = (self.frame.maxX - self.frame.minX - 40) / CGFloat(5)
@@ -282,9 +373,9 @@ class GameScene: SKScene {
         
         if sheepController.count == 0 {
             isGameOver = 1
-            let gameOverTag = SKSpriteNode(texture: SKTexture(rect: CGRect(x: 2635.0 / 4868.0, y: 1003.0 / 3787.0, width: 660.0 / 4868.0, height: 700.0 / 3787.0), in: allWindows))
+            let gameOverTag = SKSpriteNode(texture: SKTexture(rect: CGRect(x: 2635.0 / 4868.0, y: 1003.0 / 3787.0, width: 660.0 / 4868.0, height: 700.0 / 3787.0), in: AllWindows))
             gameOverTag.position = CGPoint(x: self.frame.minX - 200, y: self.frame.midY)
-            gameOverTag.zPosition = 101
+            gameOverTag.zPosition = 10
             gameOverTag.size = CGSize(width: 400, height: 200)
             let gameOverText = SKLabelNode(text: "Game Over")
             gameOverText.fontColor = UIColor.black
