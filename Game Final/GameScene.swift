@@ -327,6 +327,9 @@ class GameScene: SKScene {
         if firstWolf.row == swordPos {
             firstWolf.removeFromParent()
             totalhitCount += 1
+            if firstWolf.jumpRow == 2 || firstWolf.jumpRow == -2 {
+                totalhitCount += 2
+            }
             wolfController.remove(at: 0)
         } else {
             firstWolf.removeFromParent()

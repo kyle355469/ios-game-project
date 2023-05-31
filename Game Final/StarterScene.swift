@@ -11,9 +11,11 @@ let AllButton = SKTexture(imageNamed: "Button.png")
 let AllWindows = SKTexture(imageNamed: "Windows.png")
 let sheep = SpriteSheet(texture: SKTexture(imageNamed: "sheep2.png"), rows: 3, columns: 4)
 class StarterScene: SKScene {
-    var coinCount:Int = 10000
-    var sheepCount = 1
-    
+    var coinCount:Int = gameData["Coin"]!
+    var sheepCount = gameData["sheepLevel"]!
+    var normalHighest = gameData["normalHighest"]!
+    var hardHighest = gameData["hardHighest"]!
+    var veryhardHighest = gameData["veryHardHighest"]!
     override func didMove(to view: SKView) {
         createScene()
     }
@@ -39,7 +41,7 @@ class StarterScene: SKScene {
         coinDisplayer.position = CGPoint(x: self.frame.minX + 70, y: self.frame.maxY - 100)
         coinDisplayer.size = CGSize(width: 150, height: 60)
         let coinCounter = SKLabelNode(text: "\(coinCount)")
-        coinCounter.fontSize = 25
+        coinCounter.fontSize = 18
         coinCounter.zPosition = 1
         coinCounter.position = CGPoint(x: 20, y: -10)
         coinDisplayer.addChild(coinCounter)

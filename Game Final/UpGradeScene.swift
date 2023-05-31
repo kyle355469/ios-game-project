@@ -10,8 +10,8 @@ import SpriteKit
 import GameplayKit
 
 class UpGradeScene: SKScene {
-    var coinCount:Int = 0;
-    var sheepUpgradeLevel = 1;
+    var coinCount:Int = gameData["Coin"]!
+    var sheepUpgradeLevel = gameData["sheepLevel"]!
     var cost = 0
     override func didMove(to view: SKView) {
         cost = costCalculation()
@@ -69,6 +69,7 @@ class UpGradeScene: SKScene {
                 }
                 else {
                     coinCount -= cost
+                    gameData["Coin"]! -= cost
                     sheepUpgradeLevel += 1
                     cost = costCalculation()
                     let newCoinText = childNode(withName: "coin")?.childNode(withName: "coinCounter") as! SKLabelNode
