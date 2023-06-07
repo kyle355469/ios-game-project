@@ -1,4 +1,4 @@
-Coin:10001
+Coin:10100
 sheepLevel:1
 normalHighest:0
 hardHighest:0

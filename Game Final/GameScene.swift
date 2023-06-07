@@ -29,7 +29,10 @@ class GameScene: SKScene {
     let allWindows = SKTexture(imageNamed: "Windows")
     var sheepController: [SKSpriteNode] = []
     var wolfController: [Wolf] = []
+    
+    var gamePlayBar = CountDownBar()
     override func didMove(to view: SKView) {
+        isCountDownDoing = false
         createScene()
     }
     
@@ -42,6 +45,11 @@ class GameScene: SKScene {
         bg.zPosition = -1
         
         addChild(bg)
+        
+        gamePlayBar.buildBar()
+        gamePlayBar.position = CGPoint(x: self.frame.midX, y: self.frame.midY + 300)
+        gamePlayBar.zPosition = 500
+        addChild(gamePlayBar)
         
         let fence = SKSpriteNode(imageNamed: "fence")
         fence.size = CGSize(width: self.frame.maxX - self.frame.minX + 80, height: 240)
@@ -62,6 +70,11 @@ class GameScene: SKScene {
         pauseButton.zPosition = 2
         pauseButton.name = "pause"
         addChild(pauseButton)
+        
+//        Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
+//            self.gamePlayBar.updateBar()
+//            self.gamePlayBar.refillBar()
+//        }
     }
     
     func swordCreation() -> SKSpriteNode {
@@ -217,6 +230,14 @@ class GameScene: SKScene {
                     let s = self.childNode(withName: "sword") as! SKSpriteNode
                     s.position = CGPoint(x: px * (CGFloat(swordPos) + 0.5) + 27.0, y: self.frame.midY - 200)
                     moveDetection()
+                    if gamePlayBar.isGameStart == false {
+                        print("game start")
+                        gamePlayBar.isGameStart = true
+                    }
+                    gamePlayBar.isPaused = true
+//                    gamePlayBar.removeAllActions()
+//                    gamePlayBar.runner.run(SKAction.scaleX(to: 1, duration: 0))
+                    
                 }
                 if touchedNode.name == "rightButton" {
                     swordPos += 1;
@@ -226,6 +247,10 @@ class GameScene: SKScene {
                     let s = self.childNode(withName: "sword") as! SKSpriteNode
                     s.position = CGPoint(x: px * (CGFloat(swordPos) + 0.5) + 27.0, y: self.frame.midY - 200)
                     moveDetection()
+                    if gamePlayBar.isGameStart == false {
+                        print("game start")
+                        gamePlayBar.isGameStart = true
+                    }
                 }
                 if touchedNode.name == "twiceRightButton" {
                     swordPos += 2;
@@ -235,6 +260,10 @@ class GameScene: SKScene {
                     let s = self.childNode(withName: "sword") as! SKSpriteNode
                     s.position = CGPoint(x: px * (CGFloat(swordPos) + 0.5) + 27.0, y: self.frame.midY - 200)
                     moveDetection()
+                    if gamePlayBar.isGameStart == false {
+                        print("game start")
+                        gamePlayBar.isGameStart = true
+                    }
                 }
                 if touchedNode.name == "twiceLeftButton" {
                     swordPos -= 2;
@@ -244,9 +273,17 @@ class GameScene: SKScene {
                     let s = self.childNode(withName: "sword") as! SKSpriteNode
                     s.position = CGPoint(x: px * (CGFloat(swordPos) + 0.5) + 27.0, y: self.frame.midY - 200)
                     moveDetection()
+                    if gamePlayBar.isGameStart == false {
+                        print("game start")
+                        gamePlayBar.isGameStart = true
+                    }
                 }
                 if touchedNode.name == "midButton" {
                     moveDetection()
+                    if gamePlayBar.isGameStart == false {
+                        print("game start")
+                        gamePlayBar.isGameStart = true
+                    }
                 }
                 if touchedNode.name == "pause"{
                     isGameOver = 1
@@ -415,5 +452,19 @@ class GameScene: SKScene {
             // game over icon 停一下 進結算頁面
         }
     }
-    
+    override func update(_ currentTime: TimeInterval) {
+        if gamePlayBar.isGameStart == true && isCountDownDoing == false {
+            gamePlayBar.updateBar()
+        }
+        if doWolfmove == true {
+            moveDetection()
+            doWolfmove = false
+        }
+        if isGameOver == 1 {
+            gamePlayBar.isPaused = true
+        }
+        if isGameOver == 0 {
+            gamePlayBar.isPaused = false
+        }
+    }
 }
