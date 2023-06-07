@@ -9,8 +9,6 @@ import SpriteKit
 import GameplayKit
 
 class ChooseLevelScene: SKScene {
-    var coinCount:Int = 0
-    var sheepCount = 1
     let AllButton = SKTexture(imageNamed: "Button.png")
     override func didMove(to view: SKView) {
         createScene()
@@ -85,23 +83,22 @@ class ChooseLevelScene: SKScene {
             
             if touchedNode.name == "GoBackButton" {
                 let starterScene = StarterScene(size: self.size)
-                starterScene.coinCount = self.coinCount
-                starterScene.sheepCount = self.sheepCount
                 self.view?.presentScene(starterScene)
                 
                 // Perform any actions or logic you desire
             }
             if touchedNode.name == "normalButton" {
                 let gameScene = GameScene(size: self.size)
-                gameScene.coinCount = self.coinCount
-                gameScene.sheepCount = self.sheepCount
                 self.view?.presentScene(gameScene, transition: SKTransition.doorsOpenHorizontal(withDuration: 1))
             }
             if touchedNode.name == "hardButton" {
                 let gameScene = GameScene(size: self.size)
-                gameScene.coinCount = self.coinCount
-                gameScene.sheepCount = self.sheepCount
                 gameScene.isHard = 1
+                self.view?.presentScene(gameScene, transition: SKTransition.doorsOpenHorizontal(withDuration: 1))
+            }
+            if touchedNode.name == "diffButton" {
+                let gameScene = GameScene(size: self.size)
+                gameScene.isVeryHard = 1
                 self.view?.presentScene(gameScene, transition: SKTransition.doorsOpenHorizontal(withDuration: 1))
             }
         }

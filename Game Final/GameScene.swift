@@ -16,13 +16,12 @@ class Wolf: SKSpriteNode {
 }
 
 class GameScene: SKScene {
-    var coinCount:Int = 0
     var isGameOver = 0
     let buttonzPos = 2;
     let wolfzPos = 0;
     let swordzPos = 1;
     var isHard = 0
-    var sheepCount:Int = 5
+    var isVeryHard = 0
     var swordPos = 2
     var totalhitCount = 0;
     let sheep = SpriteSheet(texture: SKTexture(imageNamed: "sheep2.png"), rows: 3, columns: 4)
@@ -77,9 +76,9 @@ class GameScene: SKScene {
     
     func sheepCreation() {
         
-        let px = (self.frame.maxX - self.frame.minX - 60) / CGFloat(sheepCount)
+        let px = (self.frame.maxX - self.frame.minX - 60) / CGFloat(gameData["sheepLevel"]!)
         let py = self.frame.minY + 50
-        for i in 1...sheepCount {
+        for i in 1...gameData["sheepLevel"]! {
             let tempSheep = SKSpriteNode(texture: sheep.textureForColumn(column: 0, row: 0))
             tempSheep.position = CGPoint(x: Int(px * (CGFloat(i) - 0.5) + 30), y: Int(py))
             tempSheep.zPosition = CGFloat(50 - i)
@@ -122,6 +121,25 @@ class GameScene: SKScene {
                     tempWolf.addChild(rightnotify)
                 }
             }
+            if isVeryHard == 1 {
+                let tempWolfShadow1 = Wolf(texture: wolfTexture)
+                tempWolfShadow1.size = CGSize(width: 80, height: 80)
+                tempWolfShadow1.position = CGPoint(x: 80, y: 0)
+                let tempWolfShadow2 = Wolf(texture: wolfTexture)
+                tempWolfShadow2.size = CGSize(width: 80, height: 80)
+                tempWolfShadow2.position = CGPoint(x: -80, y: 0)
+                let tempWolfShadow3 = Wolf(texture: wolfTexture)
+                tempWolfShadow3.size = CGSize(width: 80, height: 80)
+                tempWolfShadow3.position = CGPoint(x: 160, y: 0)
+                let tempWolfShadow4 = Wolf(texture: wolfTexture)
+                tempWolfShadow4.size = CGSize(width: 80, height: 80)
+                tempWolfShadow4.position = CGPoint(x: -160, y: 0)
+                tempWolf.addChild(tempWolfShadow1)
+                tempWolf.addChild(tempWolfShadow2)
+                tempWolf.addChild(tempWolfShadow3)
+                tempWolf.addChild(tempWolfShadow4)
+            }
+            
             addChild(tempWolf)
             wolfController.append(tempWolf)
         }
@@ -302,8 +320,8 @@ class GameScene: SKScene {
             }
             if touchedNode.name == "restartButton" {
                 let gameScene = GameScene(size: self.size)
-                gameScene.coinCount = self.coinCount
-                gameScene.sheepCount = self.sheepCount
+                gameScene.isHard = self.isHard
+                gameScene.isVeryHard = self.isVeryHard
                 self.view?.presentScene(gameScene, transition: SKTransition.moveIn(with: .up, duration: 0.8))
             }
             if touchedNode.name == "resumeButton" {
@@ -313,8 +331,6 @@ class GameScene: SKScene {
             }
             if touchedNode.name == "menuButton" {
                 let starterScene = StarterScene(size: self.size)
-                starterScene.coinCount = self.coinCount
-                starterScene.sheepCount = self.sheepCount
                 self.view?.presentScene(starterScene, transition: SKTransition.fade(withDuration: 1))
             }
         }
@@ -393,8 +409,6 @@ class GameScene: SKScene {
             gameOverTag.run(action, completion: {
                 let scoreScene = ScoreScene(size: self.size)
                 scoreScene.totalWolfHit = self.totalhitCount
-                scoreScene.coinCount = self.coinCount
-                scoreScene.sheepCount = self.sheepCount
                 self.view?.presentScene(scoreScene, transition: SKTransition.moveIn(with: .up, duration: 0.8))
             })
             addChild(gameOverTag)

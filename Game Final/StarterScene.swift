@@ -11,11 +11,6 @@ let AllButton = SKTexture(imageNamed: "Button.png")
 let AllWindows = SKTexture(imageNamed: "Windows.png")
 let sheep = SpriteSheet(texture: SKTexture(imageNamed: "sheep2.png"), rows: 3, columns: 4)
 class StarterScene: SKScene {
-    var coinCount:Int = gameData["Coin"]!
-    var sheepCount = gameData["sheepLevel"]!
-    var normalHighest = gameData["normalHighest"]!
-    var hardHighest = gameData["hardHighest"]!
-    var veryhardHighest = gameData["veryHardHighest"]!
     override func didMove(to view: SKView) {
         createScene()
     }
@@ -40,7 +35,7 @@ class StarterScene: SKScene {
         let coinDisplayer = SKSpriteNode(texture: SKTexture(rect: coinCountCrop, in: AllWindows))
         coinDisplayer.position = CGPoint(x: self.frame.minX + 70, y: self.frame.maxY - 100)
         coinDisplayer.size = CGSize(width: 150, height: 60)
-        let coinCounter = SKLabelNode(text: "\(coinCount)")
+        let coinCounter = SKLabelNode(text: "\(gameData["Coin"]!)")
         coinCounter.fontSize = 18
         coinCounter.zPosition = 1
         coinCounter.position = CGPoint(x: 20, y: -10)
@@ -72,7 +67,7 @@ class StarterScene: SKScene {
         let StartTexture = SKTexture(rect: croppingRect, in: AllButton)
         let startButton = SKSpriteNode(texture: StartTexture)
         startButton.size = CGSize(width: 200, height: 80)
-        startButton.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
+        startButton.position = CGPoint(x: self.frame.midX, y: self.frame.midY+20)
         startButton.name = "startButton"
         let startWord = SKLabelNode(text: "Start")
         startWord.name = "startButton"
@@ -87,7 +82,7 @@ class StarterScene: SKScene {
         let upGradeTexture = SKTexture(rect: croppingRect, in: AllButton)
         let upGradeButton = SKSpriteNode(texture: upGradeTexture)
         upGradeButton.size = CGSize(width: 200, height: 80)
-        upGradeButton.position = CGPoint(x: self.frame.midX, y: self.frame.midY-100)
+        upGradeButton.position = CGPoint(x: self.frame.midX, y: self.frame.midY-80)
         upGradeButton.name = "upGradeButton"
         let upGradeWord = SKLabelNode(text: "Upgrade")
         upGradeWord.name = "upGradeButton"
@@ -98,12 +93,27 @@ class StarterScene: SKScene {
         upGradeWord.fontSize = 28
         upGradeButton.addChild(upGradeWord)
         
+        let highestTexture = SKTexture(rect: croppingRect, in: AllButton)
+        let highestButton = SKSpriteNode(texture: highestTexture)
+        highestButton.size = CGSize(width: 200, height: 80)
+        highestButton.position = CGPoint(x: self.frame.midX, y: self.frame.midY-180)
+        highestButton.name = "highestButton"
+        let highestWord = SKLabelNode(text: "highest")
+        highestWord.name = "highestButton"
+        highestWord.position = CGPoint(x: 0, y: -5)
+        highestWord.fontName = "Arial"
+        highestWord.fontColor = UIColor.black
+        highestWord.zPosition = 1
+        highestWord.fontSize = 28
+        highestButton.addChild(highestWord)
+        
         self.addChild(bg)
         self.addChild(title)
         self.addChild(sprite)
         
         self.addChild(startButton)
         self.addChild(upGradeButton)
+        self.addChild(highestButton)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -113,14 +123,10 @@ class StarterScene: SKScene {
             
             if touchedNode.name == "startButton" {
                 let chooseLevelScene = ChooseLevelScene(size: self.size)
-                chooseLevelScene.coinCount = self.coinCount
-                chooseLevelScene.sheepCount = self.sheepCount
                 self.view?.presentScene(chooseLevelScene)
             }
             else if touchedNode.name == "upGradeButton" {
                 let upgradeScene = UpGradeScene(size: self.size)
-                upgradeScene.coinCount = self.coinCount
-                upgradeScene.sheepUpgradeLevel = self.sheepCount
                 self.view?.presentScene(upgradeScene)
             }
         }

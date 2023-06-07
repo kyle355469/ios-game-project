@@ -11,8 +11,6 @@ import GameKit
 
 class ScoreScene: SKScene {
     var totalWolfHit = 0
-    var coinCount = 0
-    var sheepCount = 0
     override func didMove(to view: SKView) {
         createScene()
     }
@@ -41,7 +39,8 @@ class ScoreScene: SKScene {
         addChild(scoreText)
         
         
-        coinCount += getCoinCalculate()
+        gameData["Coin"]! += getCoinCalculate()
+        fileUpdate()
         buttonCreate()
         
         
@@ -58,20 +57,14 @@ class ScoreScene: SKScene {
             
             if touchedNode.name == "menuButton" {
                 let starterScene = StarterScene(size: self.size)
-                starterScene.coinCount = self.coinCount
-                starterScene.sheepCount = self.sheepCount
                 self.view?.presentScene(starterScene, transition: SKTransition.fade(withDuration: 1))
             }
             if touchedNode.name == "upgradeButton" {
                 let upgradeScene = UpGradeScene(size: self.size)
-                upgradeScene.coinCount = self.coinCount
-                upgradeScene.sheepUpgradeLevel = self.sheepCount
                 self.view?.presentScene(upgradeScene, transition: SKTransition.fade(withDuration: 1))
             }
             if touchedNode.name == "againButton" {
                 let gameScene = GameScene(size: self.size)
-                gameScene.coinCount = self.coinCount
-                gameScene.sheepCount = self.sheepCount
                 self.view?.presentScene(gameScene, transition: SKTransition.fade(withDuration: 1))
             }
             
@@ -83,7 +76,7 @@ class ScoreScene: SKScene {
         let coinDisplayer = SKSpriteNode(texture: SKTexture(rect: coinCountCrop, in: AllWindows))
         coinDisplayer.position = CGPoint(x: self.frame.minX + 70, y: self.frame.maxY - 100)
         coinDisplayer.size = CGSize(width: 150, height: 60)
-        let coinCounter = SKLabelNode(text: "\(coinCount)")
+        let coinCounter = SKLabelNode(text: "\(gameData["Coin"]!)")
         coinCounter.fontSize = 25
         coinCounter.zPosition = 1
         coinCounter.position = CGPoint(x: 40, y: -10)

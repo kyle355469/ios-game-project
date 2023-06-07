@@ -14,6 +14,8 @@ let data = try? Data(contentsOf: URL(fileURLWithPath: path!))
 let dataString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)! as String
 var dataArray = dataString.components(separatedBy: "\n")
 var gameData: [String: Int] = [:]
+
+
 class GameViewController: UIViewController {
     override func viewDidLoad() {
        super.viewDidLoad()
@@ -44,5 +46,21 @@ class GameViewController: UIViewController {
 
     override var prefersStatusBarHidden: Bool {
         return true
+    }
+}
+
+
+func fileUpdate() {
+    var str: String = ""
+    for i in 0...dataArray.count-2 {
+        let tempArray = dataArray[i].components(separatedBy: ":")
+        let appender: String = "\(tempArray[0]):\(String(gameData[tempArray[0]]!))\n"
+        str = str + appender
+    }
+    do{
+        try str.write(to: URL(fileURLWithPath: path!), atomically: true, encoding: .utf8)
+        print("success")
+    } catch {
+        print("error: \(error)")
     }
 }

@@ -10,8 +10,6 @@ import SpriteKit
 import GameplayKit
 
 class UpGradeScene: SKScene {
-    var coinCount:Int = gameData["Coin"]!
-    var sheepUpgradeLevel = gameData["sheepLevel"]!
     var cost = 0
     override func didMove(to view: SKView) {
         cost = costCalculation()
@@ -39,7 +37,7 @@ class UpGradeScene: SKScene {
     }
     
     func costCalculation() -> Int{
-        return ((sheepUpgradeLevel * sheepUpgradeLevel / 2 + sheepUpgradeLevel * 2) * 100)
+        return ((gameData["sheepLevel"]! * gameData["sheepLevel"]! / 2 + gameData["sheepLevel"]! * 2) * 100)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -49,15 +47,12 @@ class UpGradeScene: SKScene {
             
             if touchedNode.name == "GoBackButton" {
                 let starterScene = StarterScene(size: self.size)
-                starterScene.coinCount = self.coinCount
-                starterScene.sheepCount = sheepUpgradeLevel
                 self.view?.presentScene(starterScene)
                 
                 // Perform any actions or logic you desire
             }
             if touchedNode.name == "buyButton" || touchedNode.name == "cost" {
-                if coinCount < cost {
-                    print(coinCount)
+                if gameData["Coin"]! < cost {
                     let warning = SKLabelNode(text: "你錢不夠")
                     warning.fontColor = UIColor.black
                     warning.fontName = "Arial-BoldMT"
@@ -68,17 +63,19 @@ class UpGradeScene: SKScene {
                     addChild(warning)
                 }
                 else {
-                    coinCount -= cost
                     gameData["Coin"]! -= cost
-                    sheepUpgradeLevel += 1
+                    gameData["sheepLevel"]! += 1
                     cost = costCalculation()
                     let newCoinText = childNode(withName: "coin")?.childNode(withName: "coinCounter") as! SKLabelNode
-                    newCoinText.text = "\(coinCount)"
+                    newCoinText.text = "\(gameData["Coin"]!)"
                     let newLevelText = childNode(withName: "sheepTag")?.childNode(withName: "sheepLevel") as! SKLabelNode
-                    newLevelText.text = "Lv.\(sheepUpgradeLevel)"
+                    newLevelText.text = "Lv.\(gameData["sheepLevel"]!)"
                     let newCostText = childNode(withName: "sheepTag")?.childNode(withName: "buyButton")?.childNode(withName: "cost") as! SKLabelNode
                     newCostText.text = "\(cost)"
+                    
+                    fileUpdate()
                 }
+                
             }
         }
     }
@@ -89,7 +86,7 @@ class UpGradeScene: SKScene {
         coinDisplayer.position = CGPoint(x: self.frame.midX, y: self.frame.maxY - 70)
         coinDisplayer.size = CGSize(width: 150, height: 60)
         coinDisplayer.name = "coin"
-        let coinCounter = SKLabelNode(text: "\(coinCount)")
+        let coinCounter = SKLabelNode(text: "\(gameData["Coin"]!)")
         coinCounter.fontSize = 25
         coinCounter.name = "coinCounter"
         coinCounter.zPosition = 1
@@ -117,7 +114,7 @@ class UpGradeScene: SKScene {
         sheepUpgradeText.zPosition = 1
         sheepUpgradeText.fontName = "Arial-BoldMT"
         sheepUpgradeTag.addChild(sheepUpgradeText)
-        let SULevelText = SKLabelNode(text: "Lv.\(sheepUpgradeLevel)")
+        let SULevelText = SKLabelNode(text: "Lv.\(gameData["sheepLevel"]!)")
         SULevelText.fontSize = 18
         SULevelText.fontName = "Arial-BoldMT"
         SULevelText.fontColor = UIColor.black

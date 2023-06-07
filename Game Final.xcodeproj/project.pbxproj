@@ -7,10 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		855591892A30755300B77D2E /* CountDownBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 855591882A30755300B77D2E /* CountDownBar.swift */; };
 		85AA003F2A24BDC700EDFAA1 /* ChooseLevelScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85AA003E2A24BDC700EDFAA1 /* ChooseLevelScene.swift */; };
 		85AA00412A24C0B900EDFAA1 /* UpGradeScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85AA00402A24C0B900EDFAA1 /* UpGradeScene.swift */; };
 		85AA00432A260B5300EDFAA1 /* ScoreScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85AA00422A260B5300EDFAA1 /* ScoreScene.swift */; };
 		85AA00472A2728D100EDFAA1 /* saver.txt in Resources */ = {isa = PBXBuildFile; fileRef = 85AA00462A2728D100EDFAA1 /* saver.txt */; };
+		85AA00492A2740E300EDFAA1 /* HighestScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85AA00482A2740E200EDFAA1 /* HighestScene.swift */; };
 		CB206D8D2A24713C0017C764 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB206D8C2A24713C0017C764 /* AppDelegate.swift */; };
 		CB206D8F2A24713C0017C764 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = CB206D8E2A24713C0017C764 /* GameScene.sks */; };
 		CB206D912A24713C0017C764 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = CB206D902A24713C0017C764 /* Actions.sks */; };
@@ -23,10 +25,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		855591882A30755300B77D2E /* CountDownBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountDownBar.swift; sourceTree = "<group>"; };
 		85AA003E2A24BDC700EDFAA1 /* ChooseLevelScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseLevelScene.swift; sourceTree = "<group>"; };
 		85AA00402A24C0B900EDFAA1 /* UpGradeScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpGradeScene.swift; sourceTree = "<group>"; };
 		85AA00422A260B5300EDFAA1 /* ScoreScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreScene.swift; sourceTree = "<group>"; };
 		85AA00462A2728D100EDFAA1 /* saver.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = saver.txt; sourceTree = "<group>"; };
+		85AA00482A2740E200EDFAA1 /* HighestScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighestScene.swift; sourceTree = "<group>"; };
 		CB206D892A24713C0017C764 /* Game Final.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Game Final.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB206D8C2A24713C0017C764 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CB206D8E2A24713C0017C764 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -82,6 +86,8 @@
 				85AA00402A24C0B900EDFAA1 /* UpGradeScene.swift */,
 				85AA00422A260B5300EDFAA1 /* ScoreScene.swift */,
 				85AA00462A2728D100EDFAA1 /* saver.txt */,
+				85AA00482A2740E200EDFAA1 /* HighestScene.swift */,
+				855591882A30755300B77D2E /* CountDownBar.swift */,
 			);
 			path = "Game Final";
 			sourceTree = "<group>";
@@ -163,10 +169,12 @@
 				CB206DE32A24969C0017C764 /* GameScene.swift in Sources */,
 				85AA00432A260B5300EDFAA1 /* ScoreScene.swift in Sources */,
 				CB206D952A24713C0017C764 /* GameViewController.swift in Sources */,
+				855591892A30755300B77D2E /* CountDownBar.swift in Sources */,
 				CB206D8D2A24713C0017C764 /* AppDelegate.swift in Sources */,
 				85AA00412A24C0B900EDFAA1 /* UpGradeScene.swift in Sources */,
 				85AA003F2A24BDC700EDFAA1 /* ChooseLevelScene.swift in Sources */,
 				CB206DE92A24A7580017C764 /* StarterScene.swift in Sources */,
+				85AA00492A2740E300EDFAA1 /* HighestScene.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
