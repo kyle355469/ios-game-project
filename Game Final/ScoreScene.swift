@@ -11,6 +11,10 @@ import GameKit
 
 class ScoreScene: SKScene {
     var totalWolfHit = 0
+    
+    var coin = userdefault.object(forKey: "coin") as! Int?
+    var lv = userdefault.object(forKey: "level") as! Int?
+    
     override func didMove(to view: SKView) {
         createScene()
     }
@@ -39,8 +43,12 @@ class ScoreScene: SKScene {
         addChild(scoreText)
         
         
-        gameData["Coin"]! += getCoinCalculate()
-        fileUpdate()
+        coin! += getCoinCalculate()
+        
+        userdefault.set(coin!, forKey: "coin")
+        userdefault.synchronize()
+        
+        //fileUpdate()
         buttonCreate()
         
         
@@ -76,7 +84,7 @@ class ScoreScene: SKScene {
         let coinDisplayer = SKSpriteNode(texture: SKTexture(rect: coinCountCrop, in: AllWindows))
         coinDisplayer.position = CGPoint(x: self.frame.minX + 70, y: self.frame.maxY - 100)
         coinDisplayer.size = CGSize(width: 150, height: 60)
-        let coinCounter = SKLabelNode(text: "\(gameData["Coin"]!)")
+        let coinCounter = SKLabelNode(text: "\(coin!)")
         coinCounter.fontSize = 25
         coinCounter.zPosition = 1
         coinCounter.position = CGPoint(x: 40, y: -10)

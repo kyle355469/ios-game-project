@@ -26,6 +26,9 @@ class GameScene: SKScene {
     var totalhitCount = 0;
     let sheep = SpriteSheet(texture: SKTexture(imageNamed: "sheep2.png"), rows: 3, columns: 4)
     
+    var coin = userdefault.object(forKey: "coin") as! Int?
+    var lv = userdefault.object(forKey: "level") as! Int?
+    
     let allWindows = SKTexture(imageNamed: "Windows")
     var sheepController: [SKSpriteNode] = []
     var wolfController: [Wolf] = []
@@ -89,9 +92,9 @@ class GameScene: SKScene {
     
     func sheepCreation() {
         
-        let px = (self.frame.maxX - self.frame.minX - 60) / CGFloat(gameData["sheepLevel"]!)
+        let px = (self.frame.maxX - self.frame.minX - 60) / CGFloat(lv!)
         let py = self.frame.minY + 50
-        for i in 1...gameData["sheepLevel"]! {
+        for i in 1...lv! {
             let tempSheep = SKSpriteNode(texture: sheep.textureForColumn(column: 0, row: 0))
             tempSheep.position = CGPoint(x: Int(px * (CGFloat(i) - 0.5) + 30), y: Int(py))
             tempSheep.zPosition = CGFloat(50 - i)
@@ -235,8 +238,8 @@ class GameScene: SKScene {
                         gamePlayBar.isGameStart = true
                     }
                     gamePlayBar.isPaused = true
-//                    gamePlayBar.removeAllActions()
-//                    gamePlayBar.runner.run(SKAction.scaleX(to: 1, duration: 0))
+                    gamePlayBar.removeAllActions()
+                    gamePlayBar.runner.run(SKAction.scaleX(to: 1, duration: 0))
                     
                 }
                 if touchedNode.name == "rightButton" {
