@@ -11,18 +11,17 @@ var doWolfmove = false
 class CountDownBar: SKSpriteNode {
     private var barLen = CGFloat(5)
     private var nowLen = CGFloat(0.0)
-    var countDownTime = Float(3)
+    var countDownTime = Float(1.5)
     
     var isGameStart: Bool = false
     
     var bar = SKSpriteNode()
     var runner = SKSpriteNode()
-    var countDownBar = SKShapeNode()
-    var countDownValue = SKShapeNode()
     var insideBar = SKTexture(imageNamed: "yellowBar")
     var outsideBar = SKTexture(imageNamed: "blackBar")
     
     func buildBar(){
+        self.removeAllChildren()
         bar = SKSpriteNode(texture: outsideBar)
         bar.size = CGSize(width: 200, height: 40)
         runner = SKSpriteNode(texture: insideBar)
@@ -40,10 +39,17 @@ class CountDownBar: SKSpriteNode {
     
     func updateBar() {
         isCountDownDoing = true
+        if countDownTime >= 1.0 {
+            countDownTime *= 0.993
+        }else if countDownTime >= 0.6 {
+            countDownTime *= 0.997
+        }else if countDownTime >= 0.35 {
+            countDownTime *= 0.99
+        }
+        print(countDownTime)
         runner.run(SKAction.sequence([SKAction.scaleX(to: 0, duration: TimeInterval(countDownTime)), SKAction.scaleX(to: 1, duration: 0)]), completion: {
             isCountDownDoing = false
             doWolfmove = true
         })
-        print("a")
     }
 }

@@ -89,15 +89,18 @@ class ChooseLevelScene: SKScene {
             }
             if touchedNode.name == "normalButton" {
                 let gameScene = GameScene(size: self.size)
+                isCountDownDoing = false
                 self.view?.presentScene(gameScene, transition: SKTransition.doorsOpenHorizontal(withDuration: 1))
             }
             if touchedNode.name == "hardButton" {
                 let gameScene = GameScene(size: self.size)
+                isCountDownDoing = false
                 gameScene.isHard = 1
                 self.view?.presentScene(gameScene, transition: SKTransition.doorsOpenHorizontal(withDuration: 1))
             }
             if touchedNode.name == "diffButton" {
                 let gameScene = GameScene(size: self.size)
+                isCountDownDoing = false
                 gameScene.isVeryHard = 1
                 self.view?.presentScene(gameScene, transition: SKTransition.doorsOpenHorizontal(withDuration: 1))
             }

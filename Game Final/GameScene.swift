@@ -138,22 +138,34 @@ class GameScene: SKScene {
                 }
             }
             if isVeryHard == 1 {
-                let tempWolfShadow1 = Wolf(texture: wolfTexture)
-                tempWolfShadow1.size = CGSize(width: 80, height: 80)
-                tempWolfShadow1.position = CGPoint(x: 80, y: 0)
-                let tempWolfShadow2 = Wolf(texture: wolfTexture)
-                tempWolfShadow2.size = CGSize(width: 80, height: 80)
-                tempWolfShadow2.position = CGPoint(x: -80, y: 0)
-                let tempWolfShadow3 = Wolf(texture: wolfTexture)
-                tempWolfShadow3.size = CGSize(width: 80, height: 80)
-                tempWolfShadow3.position = CGPoint(x: 160, y: 0)
-                let tempWolfShadow4 = Wolf(texture: wolfTexture)
-                tempWolfShadow4.size = CGSize(width: 80, height: 80)
-                tempWolfShadow4.position = CGPoint(x: -160, y: 0)
-                tempWolf.addChild(tempWolfShadow1)
-                tempWolf.addChild(tempWolfShadow2)
-                tempWolf.addChild(tempWolfShadow3)
-                tempWolf.addChild(tempWolfShadow4)
+                tempWolf.jumpRow = Int(arc4random()) % 5 - 2
+                if tempWolf.jumpRow == -2 {
+                    let leftnotify = SKSpriteNode(texture: SKTexture(rect: CGRect(x: 72.0 / 1200.0, y: 534.0 / 1200.0, width: 144.0 / 1200.0, height: 156.0 / 1200.0), in: allPlayButton))
+                    leftnotify.size = CGSize(width: 40, height: 40)
+                    leftnotify.position = CGPoint(x: -20, y: -20)
+                    leftnotify.zPosition = 1
+                    tempWolf.addChild(leftnotify)
+                }
+                else if tempWolf.jumpRow == 2 {
+                    let rightnotify = SKSpriteNode(texture: SKTexture(rect: CGRect(x: 271 / 1200.0, y: 534.0 / 1200.0, width: 144.0 / 1200.0, height: 156.0 / 1200.0), in: allPlayButton))
+                    rightnotify.size = CGSize(width: 40, height: 40)
+                    rightnotify.position = CGPoint(x: -20, y: -20)
+                    rightnotify.zPosition = 1
+                    tempWolf.addChild(rightnotify)
+                } else if tempWolf.jumpRow == -1 {
+                    let leftnotify = SKSpriteNode(texture: SKTexture(rect: CGRect(x: 985.0 / 1200.0, y: 534.0 / 1200.0, width: 144.0 / 1200.0, height: 156.0 / 1200.0), in: allPlayButton))
+                    leftnotify.size = CGSize(width: 40, height: 40)
+                    leftnotify.position = CGPoint(x: -20, y: -20)
+                    leftnotify.zPosition = 1
+                    tempWolf.addChild(leftnotify)
+                }
+                else if tempWolf.jumpRow == 1 {
+                    let rightnotify = SKSpriteNode(texture: SKTexture(rect: CGRect(x: 774.0 / 1200.0, y: 534.0 / 1200.0, width: 144.0 / 1200.0, height: 156.0 / 1200.0), in: allPlayButton))
+                    rightnotify.size = CGSize(width: 40, height: 40)
+                    rightnotify.position = CGPoint(x: -20, y: -20)
+                    rightnotify.zPosition = 1
+                    tempWolf.addChild(rightnotify)
+                }
             }
             
             addChild(tempWolf)
@@ -223,7 +235,7 @@ class GameScene: SKScene {
         for touch in touches {
             let location = touch.location(in: self)
             let touchedNode = atPoint(location)
-            print(touchedNode.name)
+            //print(touchedNode.name)
             if isGameOver != 1 {
                 if touchedNode.name == "leftButton" {
                     swordPos -= 1;
@@ -237,10 +249,9 @@ class GameScene: SKScene {
                         print("game start")
                         gamePlayBar.isGameStart = true
                     }
-                    gamePlayBar.isPaused = true
-                    gamePlayBar.removeAllActions()
-                    gamePlayBar.runner.run(SKAction.scaleX(to: 1, duration: 0))
-                    
+                    gamePlayBar.runner.removeAllActions()
+                    gamePlayBar.runner.setScale(1.0)
+                    isCountDownDoing = false
                 }
                 if touchedNode.name == "rightButton" {
                     swordPos += 1;
@@ -254,6 +265,9 @@ class GameScene: SKScene {
                         print("game start")
                         gamePlayBar.isGameStart = true
                     }
+                    gamePlayBar.runner.removeAllActions()
+                    gamePlayBar.runner.setScale(1.0)
+                    isCountDownDoing = false
                 }
                 if touchedNode.name == "twiceRightButton" {
                     swordPos += 2;
@@ -267,6 +281,9 @@ class GameScene: SKScene {
                         print("game start")
                         gamePlayBar.isGameStart = true
                     }
+                    gamePlayBar.runner.removeAllActions()
+                    gamePlayBar.runner.setScale(1.0)
+                    isCountDownDoing = false
                 }
                 if touchedNode.name == "twiceLeftButton" {
                     swordPos -= 2;
@@ -280,6 +297,9 @@ class GameScene: SKScene {
                         print("game start")
                         gamePlayBar.isGameStart = true
                     }
+                    gamePlayBar.runner.removeAllActions()
+                    gamePlayBar.runner.setScale(1.0)
+                    isCountDownDoing = false
                 }
                 if touchedNode.name == "midButton" {
                     moveDetection()
@@ -287,6 +307,9 @@ class GameScene: SKScene {
                         print("game start")
                         gamePlayBar.isGameStart = true
                     }
+                    gamePlayBar.runner.removeAllActions()
+                    gamePlayBar.runner.setScale(1.0)
+                    isCountDownDoing = false
                 }
                 if touchedNode.name == "pause"{
                     isGameOver = 1
@@ -384,7 +407,7 @@ class GameScene: SKScene {
             firstWolf.removeFromParent()
             totalhitCount += 1
             if firstWolf.jumpRow == 2 || firstWolf.jumpRow == -2 {
-                totalhitCount += 2
+                totalhitCount += 3
             }
             wolfController.remove(at: 0)
         } else {
@@ -403,27 +426,63 @@ class GameScene: SKScene {
                 sheepController.remove(at: sheepController.count - 1)
             }
             
-            print(sheepController.count)
         }
         
         for wolf in wolfController {
-            if count == 0 {
-                if wolf.jumpRow == -2 {
-                    wolf.row -= 1
-                    wolf.position = CGPoint(x: wolf.position.x - px,y: wolf.position.y - 80)
+            if isHard == 1 {
+                if count == 0 {
+                    if wolf.jumpRow == -2 {
+                        wolf.row -= 1
+                        wolf.position = CGPoint(x: wolf.position.x - px,y: wolf.position.y - 80)
+                    }
+                    else if wolf.jumpRow == 2 {
+                        wolf.row += 1
+                        wolf.position = CGPoint(x: wolf.position.x + px,y: wolf.position.y - 80)
+                    }
+                    else{
+                        wolf.position = CGPoint(x: wolf.position.x ,y: wolf.position.y - 80)
+                    }
                 }
-                else if wolf.jumpRow == 2 {
-                    wolf.row += 1
-                    wolf.position = CGPoint(x: wolf.position.x + px,y: wolf.position.y - 80)
-                }
-                else{
+                else {
                     wolf.position = CGPoint(x: wolf.position.x ,y: wolf.position.y - 80)
                 }
+                count += 1
             }
-            else {
+            else if isVeryHard == 1 {
+                if count == 0 {
+                    if wolf.jumpRow == -2 {
+                        wolf.row -= 1
+                        wolf.position = CGPoint(x: px * (CGFloat(wolf.row) + 0.5) + 27.0,y: wolf.position.y - 80)
+                    }
+                    else if wolf.jumpRow == 2 {
+                        wolf.row += 1
+                        wolf.position = CGPoint(x: px * (CGFloat(wolf.row) + 0.5) + 27.0,y: wolf.position.y - 80)
+                    }
+                    else if wolf.jumpRow == -1 {
+                        wolf.row -= 2
+                        if wolf.row < 0 {
+                            wolf.row += 5
+                        }
+                        wolf.position = CGPoint(x: px * (CGFloat(wolf.row) + 0.5) + 27.0,y: wolf.position.y - 80)
+                    }
+                    else if wolf.jumpRow == 1 {
+                        wolf.row += 2
+                        if wolf.row > 4 {
+                            wolf.row -= 5
+                        }
+                        wolf.position = CGPoint(x: px * (CGFloat(wolf.row) + 0.5) + 27.0,y: wolf.position.y - 80)
+                    }
+                    else{
+                        wolf.position = CGPoint(x: px * (CGFloat(wolf.row) + 0.5) + 27.0 ,y: wolf.position.y - 80)
+                    }
+                }
+                else {
+                    wolf.position = CGPoint(x: wolf.position.x ,y: wolf.position.y - 80)
+                }
+                count += 1
+            }else {
                 wolf.position = CGPoint(x: wolf.position.x ,y: wolf.position.y - 80)
             }
-            count += 1
         }
         
         if wolfController.count < 20 {
@@ -449,6 +508,7 @@ class GameScene: SKScene {
             gameOverTag.run(action, completion: {
                 let scoreScene = ScoreScene(size: self.size)
                 scoreScene.totalWolfHit = self.totalhitCount
+                scoreScene.gameMode = self.isHard + self.isVeryHard * 2
                 self.view?.presentScene(scoreScene, transition: SKTransition.moveIn(with: .up, duration: 0.8))
             })
             addChild(gameOverTag)

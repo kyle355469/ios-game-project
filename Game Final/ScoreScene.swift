@@ -11,12 +11,28 @@ import GameKit
 
 class ScoreScene: SKScene {
     var totalWolfHit = 0
-    
+    var gameMode = 0 // 0/1/2 normal/hard/vhard
     var coin = userdefault.object(forKey: "coin") as! Int?
     var lv = userdefault.object(forKey: "level") as! Int?
-    
+    var nor = userdefault.integer(forKey: "normal")
+    var har = userdefault.integer(forKey: "hard")
+    var vhar = userdefault.integer(forKey: "ex")
+    var scored = 0
+    var isNewHighest = false
     override func didMove(to view: SKView) {
+        scored = getScoreCalculate()
+        if (gameMode == 0 && scored > nor){
+            isNewHighest = true
+            userdefault.set(scored, forKey: "normal")
+        } else if (gameMode == 1 && scored > har){
+            isNewHighest = true
+            userdefault.set(scored, forKey: "hard")
+        } else if (gameMode == 2 && scored > vhar){
+            isNewHighest = true
+            userdefault.set(scored, forKey: "ex")
+        }
         createScene()
+        print(gameMode)
     }
     
     func createScene() {
@@ -34,7 +50,7 @@ class ScoreScene: SKScene {
         scoreText.fontSize = 80
         scoreText.fontColor = UIColor.black
         scoreText.position = CGPoint(x: self.frame.midX, y: self.frame.midY + 250)
-        let score = SKLabelNode(text: "\(totalWolfHit)")
+        let score = SKLabelNode(text: "\(scored)")
         score.fontName = "Arial"
         score.fontSize = 60
         score.fontColor = UIColor.black
@@ -42,6 +58,15 @@ class ScoreScene: SKScene {
         scoreText.addChild(score)
         addChild(scoreText)
         
+        let highest = SKLabelNode(text: "🎉Highest🎉")
+        highest.fontName = "Arial"
+        highest.fontSize = 40
+        highest.fontColor = UIColor.black
+        highest.position = CGPoint(x: self.frame.midX, y: self.frame.midY + 100)
+        
+        if isNewHighest == true {
+            addChild(highest)
+        }
         
         coin! += getCoinCalculate()
         
@@ -53,9 +78,11 @@ class ScoreScene: SKScene {
         
         
     }
-    
+    func getScoreCalculate() -> Int {
+        totalWolfHit * 100
+    }
     func getCoinCalculate() -> Int {
-        return totalWolfHit * 10
+        return totalWolfHit * 5
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -73,6 +100,8 @@ class ScoreScene: SKScene {
             }
             if touchedNode.name == "againButton" {
                 let gameScene = GameScene(size: self.size)
+                gameScene.gamePlayBar.buildBar()
+                isCountDownDoing = false
                 self.view?.presentScene(gameScene, transition: SKTransition.fade(withDuration: 1))
             }
             

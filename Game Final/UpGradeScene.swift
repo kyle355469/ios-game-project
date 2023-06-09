@@ -39,7 +39,7 @@ class UpGradeScene: SKScene {
     }
     
     func costCalculation() -> Int{
-        return lv! * 1000
+        return lv! * 500
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
