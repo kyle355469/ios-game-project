@@ -133,6 +133,10 @@ class StarterScene: SKScene {
                 let upgradeScene = UpGradeScene(size: self.size)
                 self.view?.presentScene(upgradeScene)
             }
+            else if touchedNode.name == "highestButton" {
+                let highestScene = HighestScene(size: self.size)
+                self.view?.presentScene(highestScene, transition: SKTransition.push(with: SKTransitionDirection.left, duration: 0.5))
+            }
         }
     }
     func applyBoldFont(to labelNode: SKLabelNode) {

@@ -29,6 +29,7 @@ class GameViewController: UIViewController {
         if check == nil {
             userdefault.set(10000, forKey: "coin")
             userdefault.set(1, forKey: "level")
+            userdefault.set(1, forKey: "Tlevel")
             userdefault.set(0, forKey: "normal")
             userdefault.set(0, forKey: "hard")
             userdefault.set(0, forKey: "ex")

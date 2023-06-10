@@ -11,9 +11,12 @@ import GameplayKit
 
 class UpGradeScene: SKScene {
     var cost = 0
+    var Tcost = 0
     var coin = userdefault.object(forKey: "coin") as! Int?
     var lv = userdefault.object(forKey: "level") as! Int?
+    var Tlv = userdefault.object(forKey: "Tlevel") as! Int?
     override func didMove(to view: SKView) {
+        Tcost = TcostCalculation()
         cost = costCalculation()
         createScene()
     }
@@ -36,10 +39,15 @@ class UpGradeScene: SKScene {
         addChild(GoBackButton)
         coinDisplay()
         addSheepUpgrade()
+        addTimeUpgrade()
     }
     
     func costCalculation() -> Int{
         return lv! * 500
+    }
+    
+    func TcostCalculation() -> Int {
+        return Tlv! * 100 + 50
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -54,17 +62,7 @@ class UpGradeScene: SKScene {
                 // Perform any actions or logic you desire
             }
             if touchedNode.name == "buyButton" || touchedNode.name == "cost" {
-                if coin! < cost {
-                    let warning = SKLabelNode(text: "你錢不夠")
-                    warning.fontColor = UIColor.black
-                    warning.fontName = "Arial-BoldMT"
-                    warning.fontSize = 35
-                    warning.position = CGPoint(x: self.frame.midX, y: self.frame.midY - 200)
-                    let action = SKAction.sequence([SKAction.wait(forDuration: 3), SKAction.removeFromParent()])
-                    warning.run(action)
-                    addChild(warning)
-                }
-                else {
+                if coin! >= cost {
                     coin! -= cost
                     lv! += 1
                     cost = costCalculation()
@@ -81,6 +79,24 @@ class UpGradeScene: SKScene {
                     //fileUpdate()
                 }
                 
+            }
+            else if touchedNode.name == "TbuyButton" || touchedNode.name == "Tcost" {
+                if coin! >= Tcost {
+                    coin! -= Tcost
+                    Tlv! += 1
+                    Tcost = TcostCalculation()
+                    let newCoinText = childNode(withName: "coin")?.childNode(withName: "coinCounter") as! SKLabelNode
+                    newCoinText.text = "\(coin!)"
+                    let newLevelText = childNode(withName: "TimeTag")?.childNode(withName: "timeLevel") as! SKLabelNode
+                    newLevelText.text = "Lv.\(Tlv!)"
+                    let newCostText = childNode(withName: "TimeTag")?.childNode(withName: "TbuyButton")?.childNode(withName: "Tcost") as! SKLabelNode
+                    newCostText.text = "\(Tcost)"
+                    
+                    userdefault.set(coin!, forKey: "coin")
+                    userdefault.set(Tlv!, forKey: "Tlevel")
+                    userdefault.synchronize()
+                    //fileUpdate()
+                }
             }
         }
     }
@@ -106,16 +122,71 @@ class UpGradeScene: SKScene {
         self.addChild(coinDisplayer)
     }
     
+    func addTimeUpgrade() {
+        let timeUpgradeTag = SKSpriteNode(texture: SKTexture(rect: CGRect(x: 2635.0 / 4868.0, y: 1003.0 / 3787.0, width: 660.0 / 4868.0, height: 700.0 / 3787.0), in: AllWindows))
+        timeUpgradeTag.position = CGPoint(x: self.frame.midX, y: self.frame.midY - 220)
+        timeUpgradeTag.zPosition = 1
+        timeUpgradeTag.name = "TimeTag"
+        timeUpgradeTag.size = CGSize(width: 380, height: 380)
+        let timeUpgradeText = SKLabelNode(text: "MORE TIME")
+        timeUpgradeText.fontColor = UIColor.black
+        timeUpgradeText.fontSize = 35
+        timeUpgradeText.position = CGPoint(x: 0, y: 120)
+        timeUpgradeText.zPosition = 1
+        timeUpgradeText.fontName = "Arial-BoldMT"
+        timeUpgradeTag.addChild(timeUpgradeText)
+        let LevelText = SKLabelNode(text: "Lv.\(Tlv!)")
+        LevelText.fontSize = 18
+        LevelText.fontName = "Arial-BoldMT"
+        LevelText.fontColor = UIColor.black
+        LevelText.position = CGPoint(x: 0, y: 100)
+        LevelText.zPosition = 1
+        LevelText.name = "timeLevel"
+        timeUpgradeTag.addChild(LevelText)
+        
+        let timeIcon = SKSpriteNode(imageNamed: "time")
+        timeIcon.size = CGSize(width: 200, height: 250)
+        timeIcon.position = CGPoint(x: 0, y: 0)
+        timeIcon.zPosition = 2
+        timeUpgradeTag.addChild(timeIcon)
+        
+        let timePlus = SKLabelNode(text: "+")
+        timePlus.fontSize = 130
+        timePlus.position = CGPoint(x: -40, y: -80)
+        timePlus.zPosition = 10
+        timePlus.fontColor = .black
+        timePlus.fontName = "Arial-BoldMT"
+        timeUpgradeTag.addChild(timePlus)
+        
+        let buyRect = CGRect(x: 0.3, y: 0.92, width:0.2, height: 0.039)
+        let buyTexture = SKTexture(rect: buyRect, in: AllButton)
+        let buyButton = SKSpriteNode(texture: buyTexture)
+        buyButton.size = CGSize(width: 160, height: 80)
+        buyButton.position = CGPoint(x: 0, y: -120)
+        buyButton.name = "TbuyButton"
+        buyButton.zPosition = 2
+        let buyWord = SKLabelNode(text: "\(Tcost)")
+        buyWord.name = "Tcost"
+        buyWord.position = CGPoint(x: 0, y: -5)
+        buyWord.fontName = "Arial-BoldMT"
+        buyWord.fontColor = UIColor.black
+        buyWord.zPosition = 1
+        buyWord.fontSize = 28
+        buyButton.addChild(buyWord)
+        timeUpgradeTag.addChild(buyButton)
+        
+        addChild(timeUpgradeTag)
+    }
     func addSheepUpgrade() {
         let sheepUpgradeTag = SKSpriteNode(texture: SKTexture(rect: CGRect(x: 2635.0 / 4868.0, y: 1003.0 / 3787.0, width: 660.0 / 4868.0, height: 700.0 / 3787.0), in: AllWindows))
-        sheepUpgradeTag.position = CGPoint(x: self.frame.midX, y: self.frame.midY + 100)
+        sheepUpgradeTag.position = CGPoint(x: self.frame.midX, y: self.frame.midY + 150)
         sheepUpgradeTag.zPosition = 1
-        sheepUpgradeTag.size = CGSize(width: 380, height: 500)
+        sheepUpgradeTag.size = CGSize(width: 380, height: 380)
         sheepUpgradeTag.name = "sheepTag"
         let sheepUpgradeText = SKLabelNode(text: "MORE SHEEP")
         sheepUpgradeText.fontColor = UIColor.black
         sheepUpgradeText.fontSize = 35
-        sheepUpgradeText.position = CGPoint(x: 0, y: 130)
+        sheepUpgradeText.position = CGPoint(x: 0, y: 120)
         sheepUpgradeText.zPosition = 1
         sheepUpgradeText.fontName = "Arial-BoldMT"
         sheepUpgradeTag.addChild(sheepUpgradeText)
@@ -123,7 +194,7 @@ class UpGradeScene: SKScene {
         SULevelText.fontSize = 18
         SULevelText.fontName = "Arial-BoldMT"
         SULevelText.fontColor = UIColor.black
-        SULevelText.position = CGPoint(x: 0, y: 110)
+        SULevelText.position = CGPoint(x: 0, y: 100)
         SULevelText.zPosition = 1
         SULevelText.name = "sheepLevel"
         sheepUpgradeTag.addChild(SULevelText)
@@ -148,11 +219,19 @@ class UpGradeScene: SKScene {
         sheepUpgradeIcon.size = CGSize(width: 160, height: 160)
         sheepUpgradeTag.addChild(sheepUpgradeIcon)
         
+        let timePlus = SKLabelNode(text: "+")
+        timePlus.fontSize = 130
+        timePlus.position = CGPoint(x: -40, y: -80)
+        timePlus.zPosition = 10
+        timePlus.fontColor = .black
+        timePlus.fontName = "Arial-BoldMT"
+        sheepUpgradeTag.addChild(timePlus)
+        
         let buyRect = CGRect(x: 0.3, y: 0.92, width:0.2, height: 0.039)
         let buyTexture = SKTexture(rect: buyRect, in: AllButton)
         let buyButton = SKSpriteNode(texture: buyTexture)
         buyButton.size = CGSize(width: 160, height: 80)
-        buyButton.position = CGPoint(x: 0, y: -140)
+        buyButton.position = CGPoint(x: 0, y: -120)
         buyButton.name = "buyButton"
         buyButton.zPosition = 2
         let buyWord = SKLabelNode(text: "\(cost)")

@@ -11,7 +11,7 @@ var doWolfmove = false
 class CountDownBar: SKSpriteNode {
     private var barLen = CGFloat(5)
     private var nowLen = CGFloat(0.0)
-    var countDownTime = Float(1.5)
+    var countDownTime = Float(1.5) + Float(userdefault.integer(forKey: "Tlevel")) * 0.1
     
     var isGameStart: Bool = false
     
@@ -40,7 +40,7 @@ class CountDownBar: SKSpriteNode {
     func updateBar() {
         isCountDownDoing = true
         if countDownTime >= 1.0 {
-            countDownTime *= 0.993
+            countDownTime *= 0.985
         }else if countDownTime >= 0.6 {
             countDownTime *= 0.997
         }else if countDownTime >= 0.35 {
